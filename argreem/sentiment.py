@@ -87,11 +87,11 @@ def main():
     correct = 0
     str = input('This is Text', type=TEXT, placeholder='News forex Gold sport',
                 help_text='This is help text', required=True)
-    put_text(model.predict(vec.transform([str])))
+    put_text(model.predict(vec.transform([str])))  # Output
     for i in range(len(df)):
         print(df.values[i][2])
         put_text(model.predict(vec.transform([df.values[i][2]])), df.values[i][9] == model.predict(
-            vec.transform([df.values[i][2]])))
+            vec.transform([df.values[i][2]])))  # Output
 
         if df.values[i][9] == model.predict(vec.transform([df.values[i][2]])):
             correct += 1
