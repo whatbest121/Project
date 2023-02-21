@@ -3,7 +3,7 @@ import urllib.request
 import re
 import nltk
 
-scraped_data = urllib.request.urlopen('https://www.clevelandfed.org/en/newsroom-and-events/speeches/sp-20221011-an-update-on-the-economy-and-monetary-policy.aspx')
+scraped_data = urllib.request.urlopen('https://www.clevelandfed.org/en/newsroom-and-events/speeches/sp-20221011-an-update-on-the-economy-and-monetary-policy.aspx')#รับINPUT
 article = scraped_data.read()
 
 parsed_article = bs.BeautifulSoup(article,'lxml')
