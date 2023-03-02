@@ -1,0 +1,21 @@
+// flask app
+pip install flask
+pip install scikit-learn
+pip install pandas
+pip install matplotlib
+
+// Articles Summary
+pip install bs4
+pip install nltk
+pip install html5lib
+pip install lxml
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+// sentiment
+pip install pandas
+pip install scikit-learn
+pip install matplotlib
+pip install seaborn
+pip install joblib
