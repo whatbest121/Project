@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request
+from flask import Blueprint, render_template, request
 from sklearn.feature_extraction.text import CountVectorizer
 import re
 import nltk
@@ -13,35 +13,39 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 
 
-views = Blueprint('views',__name__)
+views = Blueprint('views', __name__)
 
 # controller
+
+
 @views.route('/')
 def home():
     return render_template("home.html")
 
-@views.route('/sentiment',methods=['GET','POST'] )
+
+@views.route('/sentiment', methods=['GET', 'POST'])
 def sentiment():
-    prediction= ""
+    prediction = ""
     if request.method == 'GET':
-        return render_template("sentiment.html",prediction=prediction)
+        return render_template("sentiment.html", prediction=prediction)
     else:
         input_new = request.form['newInput']
-        if input_new != None and input_new!="":
-            prediction = predictSentiment(input_new)  
-        return render_template("sentiment.html",prediction=prediction)
+        if input_new != None and input_new != "":
+            prediction = predictSentiment(input_new)
+        return render_template("sentiment.html", prediction=prediction)
 
-@views.route('/summary-articles',methods=['GET','POST'] )
+
+@views.route('/summary-articles', methods=['GET', 'POST'])
 def summaryArticles():
     summary = ""
     if request.method == 'GET':
-        return render_template("summary-article.html",summary=summary)
+        return render_template("summary-article.html", summary=summary)
     else:
         input_articles = request.form['articles']
-        if input_articles != None and input_articles!="":
+        if input_articles != None and input_articles != "":
             summary = summaryArticlesWithInput(input_articles)
-        return render_template("summary-article.html",summary=summary)
-    
+        return render_template("summary-article.html", summary=summary)
+
 
 # model
 def predictSentiment(newInput):
@@ -71,7 +75,7 @@ def predictSentiment(newInput):
     # Splitting Data
     df = data
     # Split into training and testing data
-    x = data['News']
+    x = data['processedtext']
     y = data['PriceSentiment']
     x, x_test, y, y_test = train_test_split(
         x, y, stratify=y, test_size=0.3, random_state=42)
@@ -84,7 +88,7 @@ def predictSentiment(newInput):
     model = MultinomialNB()
     model.fit(x, y)
     prediction = model.predict(vec.transform([newInput]))  # Output
-    prediction =prediction[0]
+    prediction = prediction[0]
     return prediction
 
 
@@ -93,7 +97,7 @@ def summaryArticlesWithInput(article_text):
     article_text = re.sub(r'\[[0-9]*\]', ' ', article_text)
     article_text = re.sub(r'\s+', ' ', article_text)
     # Removing special characters and digits
-    formatted_article_text = re.sub('[^a-zA-Z]', ' ', article_text )
+    formatted_article_text = re.sub('[^a-zA-Z]', ' ', article_text)
     formatted_article_text = re.sub(r'\s+', ' ', formatted_article_text)
     sentence_list = nltk.sent_tokenize(article_text)
     stopwords = nltk.corpus.stopwords.words('english')
@@ -119,8 +123,7 @@ def summaryArticlesWithInput(article_text):
                     else:
                         sentence_scores[sent] += word_frequencies[word]
 
-    summary_sentences = heapq.nlargest(7, sentence_scores, key=sentence_scores.get)
+    summary_sentences = heapq.nlargest(
+        7, sentence_scores, key=sentence_scores.get)
     summary = ' '.join(summary_sentences)
     return summary
-
-
